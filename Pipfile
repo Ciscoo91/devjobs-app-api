@@ -7,7 +7,7 @@ name = "pypi"
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 algoliasearch = "*"
-python-dotenv = "*"
+python-dotenv = "~=0.21.1"
 
 [dev-packages]
 

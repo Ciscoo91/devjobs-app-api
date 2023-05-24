@@ -4,9 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from algoliasearch.search_client import SearchClient
 from dotenv import load_dotenv
-
 load_dotenv()
-
 
 app = FastAPI()
 
