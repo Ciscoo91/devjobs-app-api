@@ -8,6 +8,8 @@ fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 algoliasearch = "*"
 python-dotenv = "~=0.21.1"
+httpx = "*"
+pytest = "*"
 
 [dev-packages]
 

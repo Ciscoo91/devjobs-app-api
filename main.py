@@ -4,19 +4,22 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from algoliasearch.search_client import SearchClient
 from dotenv import load_dotenv
+
+from model.model import RequestParams
+
 load_dotenv()
 
 app = FastAPI()
 
 
 origins = [
-    "http://localhost:5173"
+    os.environ["REACT_APP_URL"]
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_methods=["get"],
+    allow_methods=['GET', 'POST'],
     allow_headers=["*"]
 )
 
@@ -29,11 +32,35 @@ index = client.init_index(os.environ["ALGOLIA_INDEX_NAME"])
 def get_jobs():
 
     try:
-        results = index.search("blogr")
-        return {"jobs": results["hits"]}
+        results = index.search("")
+        return results["hits"]
     except Exception as e:
         print("Algolia search error: ", str(e))
         return JSONResponse(content={"error": "An error occured during search"}, status_code=500)
+
+
+@app.post("/query")
+def search_by_query_params(req: RequestParams):
+
+    try:
+        results = None
+        search = f"{req.filter} {req.location}"
+        if req.fulltime == None:
+            results = index.search(search)
+        else:
+            facet = f"contract:'{req.fulltime}'"
+            query_params = {
+                "filters": facet
+            }
+            results = index.search(search, query_params)
+
+        if results["nbHits"] == 0:
+            return JSONResponse(content={"not found": "No job post found"}, status_code=404)
+
+        return results["hits"]
+
+    except Exception as e:
+        return JSONResponse(status_code=400, content={"error": f"An error occurred during search: {e}"})
 
 
 @app.get("/jobs/{job_id}")
