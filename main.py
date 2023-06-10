@@ -13,7 +13,7 @@ app = FastAPI()
 
 
 origins = [
-    os.environ["REACT_APP_URL"]
+    "https://devjobs-app-api.onrender.com"
 ]
 
 app.add_middleware(
