@@ -13,7 +13,7 @@ app = FastAPI()
 
 
 origins = [
-    "https://devjobs-app-api.onrender.com"
+    "*"
 ]
 
 app.add_middleware(
